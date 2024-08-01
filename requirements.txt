@@ -1,0 +1,13 @@
+langchain-core
+langchain-community
+langchain
+langchain-openai
+streamlit
+streamlit-extras
+straemlined_custom_component
+streamlit-antd-components
+Tavily
+bs4
+st-gsheets-connection
+gpt-researcher
+pinecone-client
