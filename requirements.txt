@@ -6,6 +6,9 @@ langchain-pinecone
 streamlit
 streamlit-extras
 streamlit-antd-components
+st-gsheets-connection
+streamlit-carousel
+streamlit_timeline
 tavily-python
 bs4
 st-gsheets-connection
