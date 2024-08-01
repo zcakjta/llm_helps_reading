@@ -2,6 +2,7 @@ langchain-core
 langchain-community
 langchain
 langchain-openai
+langchain-pinecone
 streamlit
 streamlit-extras
 streamlit-antd-components
