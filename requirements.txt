@@ -12,5 +12,7 @@ streamlit_timeline
 tavily-python
 bs4
 st-gsheets-connection
+pandas
+numpy
 gpt-researcher
 pinecone-client
