@@ -5,7 +5,7 @@ langchain-openai
 streamlit
 streamlit-extras
 streamlit-antd-components
-Tavily
+tavily-python
 bs4
 st-gsheets-connection
 gpt-researcher
