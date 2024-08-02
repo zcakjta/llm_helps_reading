@@ -125,7 +125,7 @@ class Parse_and_scrape:
 
                 # Add the description key
                 description = (
-                     f"This is scraped content No.{counter}."
+                     f"文章 No.{counter}."
                      f"原文长度 {len(content.get('content',''))}, 阅读全文需要约{calculate_reading_time(len(content.get('content','')))}分钟"
                 )
                 content['description'] = description
@@ -171,6 +171,9 @@ class Summarize:
             """
         elif self.option == 1:
             return """ 
+        # Role :
+        You are an expert summarizer. You excel at producing comprehensive summaries that is full of important details, and retaining
+        the maximum information, especially for long content.
         # Goal: \n    
         Provide a comprehensive summary of each article provided in context.\n
         Pay close attention to the title, url, description as there could be multiple articles provided.\n
@@ -187,12 +190,15 @@ class Summarize:
         First part:\n
         You should first produce a descriptive summary about the whole article in one paragraph no longer than 300 characters.\n
         Second part: \n
-        Follow the below strucutre to produce summary for each section, and write with maximum depth of information
+        Use to following structure to guide your process of producing summary for each section, and write with maximum depth of information.
+        do not adhere to the wording of the following structure strictly , but make sure your content contains these following aspects in a 
+        coherent and logical way and rephrase it dynamically to create good experiences for the reader
         1.主题: use one sentence to summarize the section.\n 
         2.观察与发现:  extract the main findings and insights talked about in the section.\
         include opinions from all characters if multiple people express their ideas  \n
-        3.原因: focus on the why and how of the insights above, illustrate with maximum details\n
-        4.引用: make direct referenes, list evidences inlcuding factual information and numbers, and use quotations from original article that supports the findings and arguments.\n
+        3.原因: focus on the how the findings and insights are discovered, and why these findings and insights can hold, and under what conditions these hold. Illustrate with maximum details\n
+        4.引用: make direct referenes to the original content, list evidences inlcuding factual information and numbers, and use quotations from original article that supports the findings and arguments.
+        and refer as much as possible This helps the users to understand the original content better\n
 
         # General guidelines: \n
         - Summary should be well strcutured and informative and in depth, with facts and numbers if available and a minimum of 3000 words.\n
@@ -210,6 +216,7 @@ class Summarize:
             raise ValueError("Invalid option.")
     
     def produce_summary(self, state:dict):
+        smart_llm = ChatOpenAI(model = "gpt-4o-2024-05-13")
         messages = state["messages"]
         article = messages[-1].content
         #print(f"""article is {article}""")
@@ -217,7 +224,7 @@ class Summarize:
         summary_template = self.prompt_template
         prompt = ChatPromptTemplate.from_template(summary_template)
         prompt = ChatPromptTemplate.from_template(summary_template)
-        produce_summary_chain = prompt|llm|StrOutputParser()
+        produce_summary_chain = prompt|smart_llm|StrOutputParser()
         summary = produce_summary_chain.invoke({"article":article})
         return summary
     

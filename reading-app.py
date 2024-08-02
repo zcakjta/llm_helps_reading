@@ -290,15 +290,15 @@ if st.session_state["submitted"]:
             st.markdown(Researcher_response)
 
     if  st.session_state["further_qa"]:
-        if not st.session_state["qa_lists"]:
-            qa_agent = further_qa()
-            summary = st.session_state["summary"]
-            follow_up_questions = qa_agent.question(summary)
-            st.session_state["qa_lists"] = follow_up_questions
-            q_buttons =[st.button(question, use_container_width=True) for question in follow_up_questions]
-        else:
-            follow_up_questions = st.session_state["qa_lists"]
-            q_buttons =[st.button(question, use_container_width=True) for question in follow_up_questions]
+        #if not st.session_state["qa_lists"]:
+        qa_agent = further_qa()
+        summary = st.session_state["summary"]
+        follow_up_questions = qa_agent.question(summary)
+        st.session_state["qa_lists"] = follow_up_questions
+        q_buttons =[st.button(question, use_container_width=True) for question in follow_up_questions]
+        #else:
+            #follow_up_questions = st.session_state["qa_lists"]
+            #q_buttons =[st.button(question, use_container_width=True) for question in follow_up_questions]
         
         for i, clicked in enumerate(q_buttons):
             if clicked:
@@ -310,16 +310,16 @@ if st.session_state["submitted"]:
                 st.session_state["answer_to_question_asked"]= answer
                 st.subheader(question,divider="gray")
                 st.markdown(answer)
-                st.spinner("AI 搜索增强中")
                 question = st.session_state["question_asked"]
                 answer = st.session_state["answer_to_question_asked"]
                 for s in agentic_rag_response.stream({"question":question,"answer":answer}):
                     if "web_search" in s:
-                            st.write("启动AI搜索中....")
+                            st.spinner("启动AI搜索中....")
                                     
                     elif "final_answer_generation" in s:
                         enhanced_response = s['final_answer_generation']['final_answer']
-                        st.markdown(enhanced_response)
+                        expander =st.expander("结合AI搜索，生成答案")
+                        expander.write(enhanced_response)
 
         
     if prompt:= st.chat_input("💭 想深入了解文章内容？请提问"):

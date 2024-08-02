@@ -385,6 +385,7 @@ class further_qa:
         pass
 
     def question (self, summary):
+        llm = ChatOpenAI(model = 'gpt-4o-mini',temperature=0.3)
         q_prompt = """ You are a great disruptive thinker in tech industry with extensive experiences in AI, Product Management, and venture capital investment.
         You are given a summary of an article. Just like how you read, evaluate, and absorb knowledge everyday.
         You review the opinions and events discussed in the summary, and you conduct critical thinking process and come up with questions in your mind
@@ -857,8 +858,9 @@ def final_answer_generation(state):
 
 
 from langchain_community.tools.tavily_search import TavilySearchResults
+from langchain_community.retrievers import TavilySearchAPIRetriever
 
-web_search_tool = TavilySearchResults(k=5,search_depth = "advanced")
+web_search_tool = TavilySearchResults(k=3,search_depth = "advanced",include_raw_content=True)
 
 def web_search(state):
     """
