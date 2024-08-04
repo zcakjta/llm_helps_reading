@@ -113,9 +113,10 @@ session_keys = ["submitted",
                 "qa_lists",
                 "question_asked",
                 "answer_to_question_asked"]
-for key in session_keys:
-    if key not in st.session_state:
-        st.session_state[key] = []
+def init_session_keys(session_keys):
+    for key in session_keys:
+        if key not in st.session_state:
+            st.session_state[key] = []
 
 # main page when
 add_vertical_space(5)
@@ -183,6 +184,8 @@ with below_c2:
         carousel(items= create_carousel_item(data),interval = 3000,controls =False,container_height = 200)
 
 if submitted:
+        st.session_state.clear()
+        init_session_keys(session_keys)
         st.session_state["submitted"] = True
         st.session_state["empty_containers"] = True
         divider_container.empty()
@@ -252,7 +255,6 @@ def pop_up():
         st.session_state['aipm'] = False
 
 if st.session_state["submitted"]:
-    #if st.session_state["empty_containers"]:
     divider_container.empty()
     dataframe_container.empty()
     st.subheader("阅读笔记", divider="gray")
@@ -290,15 +292,16 @@ if st.session_state["submitted"]:
             st.markdown(Researcher_response)
 
     if  st.session_state["further_qa"]:
-        #if not st.session_state["qa_lists"]:
-        qa_agent = further_qa()
-        summary = st.session_state["summary"]
-        follow_up_questions = qa_agent.question(summary)
-        st.session_state["qa_lists"] = follow_up_questions
-        q_buttons =[st.button(question, use_container_width=True) for question in follow_up_questions]
-        #else:
-            #follow_up_questions = st.session_state["qa_lists"]
-            #q_buttons =[st.button(question, use_container_width=True) for question in follow_up_questions]
+        if not st.session_state["qa_lists"]:
+            qa_agent = further_qa()
+            summary = st.session_state["summary"]
+            follow_up_questions = qa_agent.question(summary)
+            st.session_state["qa_lists"] = follow_up_questions
+            q_buttons =[st.button(question, use_container_width=True) for question in follow_up_questions]
+
+        else:
+            follow_up_questions = st.session_state["qa_lists"]
+            q_buttons =[st.button(question, use_container_width=True) for question in follow_up_questions]
         
         for i, clicked in enumerate(q_buttons):
             if clicked:
