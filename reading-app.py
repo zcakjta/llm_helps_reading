@@ -72,7 +72,7 @@ with st.sidebar:
         st.markdown(" ")
 
         st.markdown('<span class="gradient-text-product">**产品专家 Agent**</span>: 基于高质量 AI 知识库，针对文章主题进行 RAG 问答，提取文章看点等能力', unsafe_allow_html=True)
-        st.markdown("""- 知识库主要内容来源于 知识星球- AI产品经理大本营(by Hanniman).\n- 使用[STORM](https://arxiv.org/html/2401.18059v1)方法通过树搜索以提升召回的覆盖率\n- 使用[Pinecone](https://www.pinecone.io/) 向量数据库, [Cohere Rerank](https://cohere.com/rerank)等API搭建高效的 RAG 链路.
+        st.markdown("""- 知识库主要内容来源于 知识星球- AI产品经理大本营(by Hanniman).\n- 使用[RAPTOR](https://arxiv.org/html/2401.18059v1)方法通过树搜索以提升召回的覆盖率\n- 使用[Pinecone](https://www.pinecone.io/) 向量数据库, [Cohere Rerank](https://cohere.com/rerank)等API搭建高效的 RAG 链路.
                     """)   
     
     elif tabs == 1:
