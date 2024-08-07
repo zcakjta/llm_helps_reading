@@ -7,6 +7,7 @@ from langchain_core.output_parsers.openai_functions import JsonOutputFunctionsPa
 from langchain_core.messages import BaseMessage, HumanMessage
 from langchain_core.output_parsers import StrOutputParser
 from langgraph.checkpoint.sqlite import SqliteSaver
+from langgraph.checkpoint import MemorySaver
 from typing import List
 from langchain_openai import ChatOpenAI
 from langgraph.graph import StateGraph, END
@@ -253,8 +254,12 @@ class SummarizerAgent:
     def init_team(self):
         summarizer = Summarize(self.option)
         Parser = Parse_and_scrape()
+        
+        ##
+        ##memory = SqliteSaver.from_conn_string(":memory:")
+        #memory = MemorySaver()
 
-        memory = SqliteSaver.from_conn_string(":memory:")
+
         Summarizer_workflow= StateGraph(SummarizeTeamState)
         Summarizer_workflow.add_node("Parse_and_scrape", Parser.run)
         Summarizer_workflow.add_node("Summarize", summarizer.run)
@@ -271,19 +276,29 @@ class SummarizerAgent:
         Summarizer_workflow.add_conditional_edges("Summarizer_team", lambda x: x["next"], conditional_map)
         # Finally, add entrypoint
         Summarizer_workflow.set_entry_point("Summarizer_team")
-
-        self.Summarizer_graph = Summarizer_workflow.compile(checkpointer= memory)
-
+        
+        ##
+        ##elf.Summarizer_graph = Summarizer_workflow.compile(checkpointer= memory)
+        ##
+        
+        self.Summarizer_graph = Summarizer_workflow.compile()
         return self.Summarizer_graph
     
     
-    def run(self, messages, thread_id):
+    def run(self, messages):
+        self.Summarizer_graph = self.init_team()
+        ##
         thread_id =1
         self.config = {"configurable": {"thread_id":thread_id}}
-        self.Summarizer_graph = self.init_team()
+        ##
+        ##
         results = self.Summarizer_graph.stream({"messages":[HumanMessage(content=messages)]},self.config)
+        ##
+        results = self.Summarizer_graph.stream({"messages":[HumanMessage(content=messages)]})
+
         return results
 
+##
     def get_state_messages(self):
         all_states = []
         for state in self.Summarizer_graph.get_state_history(self.config):
@@ -305,3 +320,4 @@ class SummarizerAgent:
                     info_list.append(info_dict)
 
         return info_list
+##

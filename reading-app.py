@@ -9,6 +9,7 @@ from streamlit_timeline import timeline
 from streamlit_extras.add_vertical_space import add_vertical_space
 from PIL import Image
 import pandas as pd
+import ast
 import os 
 import asyncio
 
@@ -192,15 +193,38 @@ if submitted:
         dataframe_container.empty()
         with st.spinner('✍🏼阅读助手总结中....'):
             Summarizer_agent = SummarizerAgent(option)
-            response  = Summarizer_agent.run(input_text,2)
+            response  = Summarizer_agent.run(input_text)
             article = None
+            all_states = []
             summary = None
             for event in response:
+                ##
+                all_states.append(event)
+                ##
                 if 'Parse_and_scrape' in event:
                     article = event["Parse_and_scrape"]["messages"][0].content
                 if 'Summarize' in event:
                     summary = event["Summarize"]["messages"][0].content
-            info_list = Summarizer_agent.get_state_messages()
+            
+            ##
+            counter = 0
+            info_list = []
+            message = all_states[1]['Parse_and_scrape']['messages'][0].content
+            message = ast.literal_eval(message)
+            for i in message:
+                        info_dict={}
+                        title = i.get("title")
+                        url = i.get("url")
+                        description = i.get("description")
+                        info_dict["title"] = title
+                        info_dict["url"] = url
+                        info_dict["description"] = description
+                        info_list.append(info_dict)
+
+            ##
+            #info_list = Summarizer_agent.get_state_messages()
+
+            ##
             st.session_state["user_input"] = input_text
             st.session_state["artcile"] = article
             st.session_state["summary"] = summary
