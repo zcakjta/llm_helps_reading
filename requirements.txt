@@ -1,5 +1,6 @@
 langchain-core
 langchain-community
+langgraph
 langchain
 langchain-openai
 langchain-pinecone
