@@ -16,4 +16,4 @@ pandas
 numpy
 gpt-researcher
 pinecone-client
-pysqlite
+aiosqlite
