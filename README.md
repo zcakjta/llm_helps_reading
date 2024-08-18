@@ -1,6 +1,6 @@
 
 # 📖 llm-helps-reading
-An AI-powered reading helper that accelerates you reding process by providing comprehensive summaries and making thoughtful discussions.
+An AI-powered reading helper that accelerates you reading process by providing comprehensive summaries and making thoughtful discussions.
 Powered by streamlit.
 
 <img width="1428" alt="image" src="https://github.com/user-attachments/assets/6c3f9cac-48db-470c-986f-a68dce1ad290">
